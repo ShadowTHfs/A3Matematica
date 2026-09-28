@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Desafio Algébrico — jogo educativo de Álgebra para Ensino Médio e ENEM.">
+  <title>Desafio Algébrico</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand" onclick="showScreen('home')">
+        <div class="brand-mark">∑</div>
+        <div>
+          <strong>Desafio Algébrico</strong>
+          <span>Rumo ao ENEM</span>
+        </div>
+      </div>
+      <div class="top-stats">
+        <span id="headerScore">⭐ 0</span>
+        <span id="headerLives">❤️ 3</span>
+      </div>
+    </header>
+
+    <main>
+      <section id="home" class="screen active">
+        <div class="hero">
+          <div class="hero-badge">🎓 ENSINO MÉDIO + ENEM</div>
+          <h1>Transforme álgebra em<br><span>um desafio.</span></h1>
+          <p>Aprenda, pratique e teste seu raciocínio com problemas que vão do básico ao estilo ENEM.</p>
+          <div class="hero-actions">
+            <button class="primary-btn" onclick="startChallenge()">⚡ Começar desafio</button>
+            <button class="secondary-btn" onclick="showScreen('learn')">📚 Aprender</button>
+          </div>
+        </div>
+
+        <div class="section-title">
+          <div>
+            <span class="eyebrow">SUA JORNADA</span>
+            <h2>Escolha como estudar</h2>
+          </div>
+        </div>
+
+        <div class="mode-grid">
+          <button class="mode-card" onclick="startChallenge()">
+            <div class="mode-icon blue">⚡</div>
+            <div>
+              <h3>Modo Desafio</h3>
+              <p>Questões aleatórias, pontuação e vidas.</p>
+            </div>
+            <span class="arrow">→</span>
+          </button>
+          <button class="mode-card" onclick="startSimulado()">
+            <div class="mode-icon purple">📝</div>
+            <div>
+              <h3>Simulado ENEM</h3>
+              <p>10 questões contextualizadas.</p>
+            </div>
+            <span class="arrow">→</span>
+          </button>
+          <button class="mode-card" onclick="showScreen('learn')">
+            <div class="mode-icon green">💡</div>
+            <div>
+              <h3>Modo Aprender</h3>
+              <p>Revise conceitos com exemplos rápidos.</p>
+            </div>
+            <span class="arrow">→</span>
+          </button>
+        </div>
+
+        <div class="topics">
+          <span>Expressões</span><span>Equações</span><span>Sistemas</span><span>Funções</span><span>2º grau</span>
+        </div>
+      </section>
+
+      <section id="learn" class="screen">
+        <div class="page-heading">
+          <button class="back-btn" onclick="showScreen('home')">← Voltar</button>
+          <span class="eyebrow">MODO APRENDER</span>
+          <h1>Revise o essencial</h1>
+          <p>Escolha um assunto e veja uma explicação curta antes de praticar.</p>
+        </div>
+        <div id="lessonGrid" class="lesson-grid"></div>
+      </section>
+
+      <section id="game" class="screen">
+        <div class="game-top">
+          <button class="back-btn" onclick="confirmExit()">← Sair</button>
+          <div class="progress-wrap">
+            <div class="progress-label"><span id="gameModeLabel">DESAFIO</span><span id="questionCounter">1/10</span></div>
+            <div class="progress"><div id="progressBar"></div></div>
+          </div>
+          <div class="game-stat">⭐ <span id="gameScore">0</span></div>
+        </div>
+
+        <article class="question-card">
+          <div class="question-meta">
+            <span id="difficultyBadge" class="difficulty">MÉDIO</span>
+            <span id="topicLabel">Equações</span>
+          </div>
+          <h2 id="questionText"></h2>
+          <div id="answers" class="answers"></div>
+          <div id="feedback" class="feedback hidden"></div>
+          <div class="question-actions">
+            <button id="hintBtn" class="hint-btn" onclick="showHint()">💡 Dica <span>-20 pts</span></button>
+            <button id="nextBtn" class="next-btn hidden" onclick="nextQuestion()">Continuar →</button>
+          </div>
+        </article>
+      </section>
+
+      <section id="result" class="screen">
+        <div class="result-card">
+          <div id="resultIcon" class="result-icon">🏆</div>
+          <span class="eyebrow">RESULTADO</span>
+          <h1 id="resultTitle">Desafio concluído!</h1>
+          <p id="resultSubtitle"></p>
+          <div class="result-score"><span id="finalScore">0</span><small> pontos</small></div>
+          <div class="result-grid">
+            <div><strong id="finalCorrect">0</strong><span>Acertos</span></div>
+            <div><strong id="finalAccuracy">0%</strong><span>Aproveitamento</span></div>
+            <div><strong id="finalStreak">0</strong><span>Maior sequência</span></div>
+          </div>
+          <div id="resultAdvice" class="advice"></div>
+          <div class="result-actions">
+            <button class="primary-btn" onclick="startChallenge()">🔄 Jogar novamente</button>
+            <button class="secondary-btn" onclick="showScreen('home')">⌂ Menu principal</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>Desafio Algébrico • Projeto educacional • Feito para estudar brincando</footer>
+  </div>
+
+  <div id="lessonModal" class="modal hidden" onclick="closeModal(event)">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeLesson()">×</button>
+      <span id="lessonTag" class="eyebrow"></span>
+      <h2 id="lessonTitle"></h2>
+      <div id="lessonBody"></div>
+      <button class="primary-btn full" onclick="closeLesson(); startChallenge()">Praticar agora →</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
